@@ -1,6 +1,11 @@
-def bubble_sort(numbers):
+def bubble_sort(numbers, ascending=True):
     """
     Функция для сортировки списка чисел методом пузырька
+    с возможностью выбора направления сортировки
+    
+    Args:
+        numbers: список чисел для сортировки
+        ascending: если True - по возрастанию, False - по убыванию
     """
     n = len(numbers)
     
@@ -11,8 +16,14 @@ def bubble_sort(numbers):
         
         # Последние i элементов уже на своих местах
         for j in range(0, n - i - 1):
-            # Если текущий элемент больше следующего, меняем их местами
-            if numbers[j] > numbers[j + 1]:
+            # Выбираем условие сравнения в зависимости от направления сортировки
+            if ascending:
+                condition = numbers[j] > numbers[j + 1]
+            else:
+                condition = numbers[j] < numbers[j + 1]
+            
+            # Если условие выполняется, меняем элементы местами
+            if condition:
                 numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]
                 swapped = True
         
@@ -22,11 +33,30 @@ def bubble_sort(numbers):
     
     return numbers
 
+def get_sorting_direction():
+    """
+    Функция для запроса направления сортировки у пользователя
+    """
+    print("\nВыберите направление сортировки:")
+    print("1 - По возрастанию (от меньшего к большему)")
+    print("2 - По убыванию (от большего к меньшему)")
+    
+    while True:
+        choice = input("Ваш выбор (1 или 2): ").strip()
+        
+        if choice == "1":
+            return True  # ascending
+        elif choice == "2":
+            return False  # descending
+        else:
+            print("Неверный выбор! Пожалуйста, введите 1 или 2.")
+
 def main():
     """
     Основная функция программы
     """
     print("=== Программа сортировки чисел методом пузырька ===")
+    print("С возможностью выбора направления сортировки")
     print()
     
     try:
@@ -53,15 +83,23 @@ def main():
         # Выводим исходный список
         print(f"\nИсходный список: {numbers}")
         
-        # Сортируем список
-        sorted_numbers = bubble_sort(numbers.copy())  # Используем copy чтобы не изменять оригинал
+        # Запрашиваем направление сортировки
+        ascending = get_sorting_direction()
         
-        # Выводим отсортированный список
-        print(f"Отсортированный список: {sorted_numbers}")
+        # Сортируем список
+        sorted_numbers = bubble_sort(numbers.copy(), ascending)
+        
+        # Выводим результат
+        direction = "по возрастанию" if ascending else "по убыванию"
+        print(f"\nСписок отсортированный {direction}: {sorted_numbers}")
         
         # Дополнительная информация
-        print(f"\nМинимальное число: {sorted_numbers[0]}")
-        print(f"Максимальное число: {sorted_numbers[-1]}")
+        if ascending:
+            print(f"Минимальное число: {sorted_numbers[0]}")
+            print(f"Максимальное число: {sorted_numbers[-1]}")
+        else:
+            print(f"Максимальное число: {sorted_numbers[0]}")
+            print(f"Минимальное число: {sorted_numbers[-1]}")
         
     except ValueError:
         print("Ошибка: пожалуйста, введите корректное целое число для количества!")
